@@ -28,6 +28,7 @@ if __name__ == '__main__':
     print("Ascender "+str(f.ascender))
     print("Descender "+str(f.descender))
     print("Units "+str(f.units_per_em))
+    print("MacStyle "+str(f.tables[b'head'].mac_style))
     for c in chars:
         glyph = f.char_to_glyph(c)
         print("Width %d %d" % (c, f.glyph_metrics[glyph][0]))
