@@ -24,7 +24,6 @@ if __name__ == '__main__':
             pass
     chars = sorted(glyphs.keys())
 
-    print(f.name)
     fontID = re.sub(r"[^0-9A-Za-z]", "_", f.name)
     if fontID[0].isdigit():
         fontID = "_" + fontID
