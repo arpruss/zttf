@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print("MacStyle "+str(f.tables[b'head'].mac_style))
     for c in chars:
         glyph = f.char_to_glyph(c)
-        print("Width %d %d" % (c, f.glyph_metrics[glyph][0]))
+        print("Width %d %d %d" % (c, f.glyph_metrics[glyph][0], f.glyph_metrics[glyph][1]))
         for c2 in chars:
             r = f.char_to_glyph(c2)
             if (glyph,r) in f.glyph_kern:
