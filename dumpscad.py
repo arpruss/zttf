@@ -33,17 +33,17 @@ if __name__ == '__main__':
  %d, // ascender
  %d, // descender
  %f, // units_per_em
- METRICS_%s
-];""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, f.ascender, f.descender, f.units_per_em,fontID))
-    print("METRICS_%s = [" % fontID)
+ [
+""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, f.ascender, f.descender, 
+       f.units_per_em))
     for c in chars:
         glyph = f.char_to_glyph(c)
-        line = " [ chr(%d), %d, [" % ( c, f.glyph_metrics[glyph][0] )
+        line = "  [ chr(%d), %d, [" % ( c, f.glyph_metrics[glyph][0] )
         for c2 in chars:
             r = f.char_to_glyph(c2)
             if (glyph,r) in f.glyph_kern:
                 line += "[chr(%d),%d]," % (c2, f.glyph_kern[(glyph,r)])
         line += "] ],"
         print(line)
-    print("];\n")
+    print(" ]\n];\n")
             
