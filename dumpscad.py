@@ -24,6 +24,7 @@ if __name__ == '__main__':
             pass
     chars = sorted(glyphs.keys())
 
+    print(f.name)
     fontID = re.sub(r"[^0-9A-Za-z]", "_", f.name)
     if fontID[0].isdigit():
         fontID = "_" + fontID
@@ -34,7 +35,7 @@ if __name__ == '__main__':
  %d, // descender
  %f, // units_per_em
  [
-""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, f.ascender, f.descender, 
+""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, f.tables[b'os2'].sTypoAscender, f.tables[b'os2'].sTypoDescender, 
        f.units_per_em))
     for c in chars:
         glyph = f.char_to_glyph(c)

@@ -27,6 +27,7 @@ if __name__ == '__main__':
     print("Name "+f.name)
     print("Ascender "+str(f.ascender))
     print("Descender "+str(f.descender))
+    print("AdvanceWidthMax "+str(f.header.advance_width_max))
     print("Units "+str(f.units_per_em))
     print("MacStyle "+str(f.tables[b'head'].mac_style))
     for c in chars:

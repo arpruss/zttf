@@ -91,7 +91,10 @@ def fixed_version(num):
     :param num: fixed 16:16 floating point number as a 32-bit unsigned integer
     :return: version number (float)
     """
-    return float("{:04x}.{:04x}".format(num >> 16, num & 0x0000ffff))
+    try:
+      return float("{:04x}.{:04x}".format(num >> 16, num & 0x0000ffff))
+    except:
+      return 1.0
 
 
 def binary_search_parameters(length):
