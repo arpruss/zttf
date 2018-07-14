@@ -1,3 +1,4 @@
+import re
 import sys
 from zttf.ttfile import TTFile
 
@@ -23,17 +24,26 @@ if __name__ == '__main__':
             pass
     chars = sorted(glyphs.keys())
 
-    print("Family "+f.font_family)
-    print("Name "+f.name)
-    print("Ascender "+str(f.ascender))
-    print("Descender "+str(f.descender))
-    print("Units "+str(f.units_per_em))
-    print("MacStyle "+str(f.tables[b'head'].mac_style))
+    fontID = re.sub(r"[^0-9A-Za-z]", "_", f.name)
+    if fontID[0].isdigit():
+        fontID = "_" + fontID
+    print("""FONT_%s = [
+ ["%s", // family
+ %d], // style
+ %d, // ascender
+ %d, // descender
+ %f, // units_per_em
+ METRICS_%s
+];""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, f.ascender, f.descender, f.units_per_em,fontID))
+    print("METRICS_%s = [" % fontID)
     for c in chars:
         glyph = f.char_to_glyph(c)
-        print("Width %d %d" % (c, f.glyph_metrics[glyph][0]))
+        line = " [ chr(%d), %d, [" % ( c, f.glyph_metrics[glyph][0] )
         for c2 in chars:
             r = f.char_to_glyph(c2)
             if (glyph,r) in f.glyph_kern:
-                print("Kern %d %d %d" % (c, c2, f.glyph_kern[(glyph,r)]))
+                line += "[chr(%d),%d]," % (c2, f.glyph_kern[(glyph,r)])
+        line += "] ],"
+        print(line)
+    print("];\n")
             
