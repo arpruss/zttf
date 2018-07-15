@@ -1,6 +1,7 @@
 import re
 import sys
 from zttf.ttfile import TTFile
+from struct import unpack
 
 
 if __name__ == '__main__':
@@ -23,6 +24,17 @@ if __name__ == '__main__':
         except:
             pass
     chars = sorted(glyphs.keys())
+    """
+    maxAscent = 0
+    for r in (range(ord('A'),ord('Z')+1),range(ord('a'),ord('z')+1)):
+        for c in r:
+            if c in glyphs:
+                data = f.get_glyph_data(glyphs[c])
+                ascent = unpack(">hhhhh", data[:10])[4]
+                print(chr(c),ascent)
+                maxAscent = max(ascent,maxAscent)
+    """
+    maxAscent = f.tables[b'os2'].sTypoAscender
 
     fontID = re.sub(r"[^0-9A-Za-z]", "_", f.name)
     if fontID[0].isdigit():
@@ -34,7 +46,7 @@ if __name__ == '__main__':
  %d, // descender
  %f, // units_per_em
  [
-""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, f.tables[b'os2'].sTypoAscender, f.tables[b'os2'].sTypoDescender, 
+""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, maxAscent, f.tables[b'os2'].sTypoDescender, 
        f.units_per_em))
     for c in chars:
         glyph = f.char_to_glyph(c)

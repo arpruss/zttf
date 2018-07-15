@@ -27,12 +27,11 @@ if __name__ == '__main__':
     print("Name "+f.name)
     print("Ascender "+str(f.ascender))
     print("Descender "+str(f.descender))
-    print("AdvanceWidthMax "+str(f.header.advance_width_max))
     print("Units "+str(f.units_per_em))
     print("MacStyle "+str(f.tables[b'head'].mac_style))
     for c in chars:
         glyph = f.char_to_glyph(c)
-        print("Width %d %d %d" % (c, f.glyph_metrics[glyph][0], f.glyph_metrics[glyph][1]))
+        print(("Width %d %d %d " % (c, f.glyph_metrics[glyph][0], f.glyph_metrics[glyph][1]))+chr(c))
         for c2 in chars:
             r = f.char_to_glyph(c2)
             if (glyph,r) in f.glyph_kern:

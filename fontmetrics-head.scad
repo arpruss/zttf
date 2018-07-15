@@ -41,10 +41,13 @@ function familyAndStyle(s) =
     n < 0 ? [s, 0] :
     [substring(s,0,n), styleNumber(substring(lc,n+7))];
     
-function findEntry(data, index, offset=0) =
+function findEntry(data, index) = data[search([index], data, 1, 0)[0]];
+    
+/*function findEntry_recursive(data, index, offset=0) =
     offset >= len(data) ? undef :
     data[offset][0] == index ? data[offset] :
-    findEntry(data, index, offset=offset+1);
+    findEntry(data, index, offset=offset+1); */
+    
     
 function findFont(fonts, s) = findEntry(fonts, familyAndStyle(s));
 
@@ -71,3 +74,4 @@ function descender(font="Arial", size=10.) =
     let(f=findFont(FONTS, font))
     -size / f[1] * f[2];
 // end MIT licensed code
+
