@@ -1,4 +1,5 @@
-rm mstfonts.scad
-for x in mst/* ; do echo $x ; (python dumpscad.py $x >> mstfonts.scad )  ; done
-python makelist.py mstfonts.scad > list.scad
-cat list.scad >> mstfonts.scad
+rm fontmetricdata.scad
+for x in mst/* ; do echo $x ; (python dumpscad.py $x >> fontmetricdata.scad )  ; done
+python makelist.py fontmetricdata.scad > list.scad
+cat list.scad >> fontmetricdata.scad
+cat fontmetrics-head.scad fontmetricdata.scad > fontmetrics.scad
