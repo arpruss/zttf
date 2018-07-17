@@ -208,7 +208,7 @@ class TTFont(object):
         glyph_start = self.get_glyph_position(glyph)
         glyph_length = self.get_glyph_position(glyph + 1) - glyph_start
         if glyph_length == 0:
-            print("Zero length glyph @ {}".format(glyph))
+            #print("Zero length glyph @ {}".format(glyph))
             return b''
         self._open()
         self.file_handle.seek(data_start + glyph_start)

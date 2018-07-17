@@ -3,6 +3,17 @@ import sys
 from zttf.ttfile import TTFile
 from struct import unpack
 
+def glyphBox(f,g):
+    data = f.get_glyph_data(g)
+    if not len(data):
+        return (0,0,0,0)
+    return unpack(">hhhhh", data[:10])[1:]
+
+def describeChar(c):
+    if c >= 32 and c<127 and c != ord('\\') and c != ord('"'):
+        return '"'+chr(c)+'"'
+    else:
+        return "chr(%d)" % c
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -34,7 +45,7 @@ if __name__ == '__main__':
                 print(chr(c),ascent)
                 maxAscent = max(ascent,maxAscent)
     """
-    maxAscent = f.tables[b'os2'].sTypoAscender
+    ascent = f.tables[b'os2'].sTypoAscender
 
     fontID = re.sub(r"[^0-9A-Za-z]", "_", f.name)
     if fontID[0].isdigit():
@@ -44,18 +55,23 @@ if __name__ == '__main__':
  %d], // style
  %d, // ascender
  %d, // descender
+ %d, // line gap
  %f, // units_per_em
- [
-""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, maxAscent, f.tables[b'os2'].sTypoDescender, 
+ [""" % (fontID, f.font_family,  f.tables[b'head'].mac_style, ascent, 
+       f.tables[b'os2'].sTypoDescender, 
+       f.tables[b'os2'].typo_line_gap,
        f.units_per_em))
     for c in chars:
         glyph = f.char_to_glyph(c)
-        line = "  [ chr(%d), %d, [" % ( c, f.glyph_metrics[glyph][0] )
+        box = glyphBox(f,glyph)
+        line = " [%s,%d,%d,%d,%d,%d,%d,[" % ( describeChar(c), f.glyph_metrics[glyph][0],
+                 f.glyph_metrics[glyph][1], box[0], box[1], box[2], box[3] )
+        kerns=[]
         for c2 in chars:
             r = f.char_to_glyph(c2)
             if (glyph,r) in f.glyph_kern:
-                line += "[chr(%d),%d]," % (c2, f.glyph_kern[(glyph,r)])
-        line += "] ],"
+                kerns.append("[%s,%d]" % (describeChar(c2), f.glyph_kern[(glyph,r)]))
+        line += ','.join(kerns)+"]],"
         print(line)
     print(" ]\n];\n")
             
