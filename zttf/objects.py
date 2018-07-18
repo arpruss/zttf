@@ -451,7 +451,7 @@ class TTF_cmap(PackedFormat):
                     break
 
     def char_to_glyph(self, char, fh):
-        for p in self.PREFS:
+        for p in self.tables: #PREFS:
             if p in self.tables and self.tables[p].has_map_data:
                 for rng in self.tables[p].map_data.ranges:
                     if rng.end < char:

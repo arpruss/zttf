@@ -21,15 +21,16 @@ if __name__ == '__main__':
         sys.exit(0)
 
     t = TTFile(sys.argv[1])
+    t = TTFile(sys.argv[1])
     if not t.is_valid:
         print("Invalid")
         sys.exit(0)
         
     f = t.faces[0]    
     glyphs = {}    
-    for c in range(0,65536):
+    for c in range(0, 65536):
         try:
-            g = f.char_to_glyph(c)
+            g = f.char_to_glyph(c+0xF000 if f.name == "Webdings" and c<256 else c)
             if g:
                 glyphs[c] = g
         except:
@@ -62,16 +63,19 @@ if __name__ == '__main__':
        f.tables[b'os2'].typo_line_gap,
        f.units_per_em))
     for c in chars:
-        glyph = f.char_to_glyph(c)
-        box = glyphBox(f,glyph)
-        line = " [%s,%d,%d,%d,%d,%d,%d,[" % ( describeChar(c), f.glyph_metrics[glyph][0],
-                 f.glyph_metrics[glyph][1], box[0], box[1], box[2], box[3] )
-        kerns=[]
-        for c2 in chars:
-            r = f.char_to_glyph(c2)
-            if (glyph,r) in f.glyph_kern:
-                kerns.append("[%s,%d]" % (describeChar(c2), f.glyph_kern[(glyph,r)]))
-        line += ','.join(kerns)+"]],"
-        print(line)
+        try:
+            glyph = glyphs[c]
+            box = glyphBox(f,glyph)
+            line = " [%s,%d,%d,%d,%d,%d,%d,[" % ( describeChar(c), f.glyph_metrics[glyph][0],
+                     f.glyph_metrics[glyph][1], box[0], box[1], box[2], box[3] )
+            kerns=[]
+            for c2 in chars:
+                r = f.char_to_glyph(c2)
+                if (glyph,r) in f.glyph_kern:
+                    kerns.append("[%s,%d]" % (describeChar(c2), f.glyph_kern[(glyph,r)]))
+            line += ','.join(kerns)+"]],"
+            print(line)
+        except:
+            pass
     print(" ]\n];\n")
             
